@@ -1,0 +1,82 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zy.com.cn.demo.take.task.mapper.OrderInfoMapper">
+    <resultMap id="BASE_RESULT_MAP" type="zy.com.cn.demo.take.task.model.OrderInfo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="attain_way" jdbcType="INTEGER" property="attainWay"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag"/>
+    </resultMap>
+    <sql id="BASE_TABLE">
+        sicily_order_info
+    </sql>
+    <sql id="BASE_COLUMN">
+        id,user_id, attain_way, price, address, remark, status, created_by, created_date, deleted_flag
+    </sql>
+
+    <insert id="insertRecord" parameterType="zy.com.cn.demo.take.task.model.OrderInfo">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into  <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            user_id, attain_way, price, address, remark, status, created_by, created_date, deleted_flag
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            #{userId, jdbcType=INTEGER},
+            #{attainWay, jdbcType=INTEGER},
+            #{price, jdbcType=DOUBLE},
+            #{address, jdbcType=VARCHAR},
+            #{remark, jdbcType=VARCHAR},
+            #{status, jdbcType=INTEGER},
+            #{createdBy, jdbcType=VARCHAR},
+            NOW(),
+            'N'
+        </trim>
+    </insert>
+
+    <update id="updateRecord" parameterType="zy.com.cn.demo.take.task.model.OrderInfo">
+        update <include refid="BASE_TABLE"/>
+        <set>
+            <if test="attainWay != null">
+                attain_way =#{attainWay, jdbcType=INTEGER},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address, jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null and remar != ''">
+                remark = #{remark, jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status =#{status, jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id, jdbcType=INTEGER}
+    </update>
+
+    <select id="getRecord" parameterType="java.lang.Integer" resultMap="BASE_RESULT_MAP">
+        select <include refid="BASE_COLUMN"/>
+        from <include refid="BASE_TABLE"/>
+        where id = #{id, jdbcType=INTEGER}
+    </select>
+
+    <select id="listRecord" parameterType="zy.com.cn.demo.take.task.model.OrderInfo" resultMap="BASE_RESULT_MAP">
+        select <include refid="BASE_COLUMN"/>
+        from <include refid="BASE_TABLE"/>
+        where deleted_flag = 'N'
+        <if test="userId != null">
+            and user_id = #{userId, jdbcType=INTEGER}
+        </if>
+        <if test="attainWay != null">
+            and attain_way = #{attainWay, jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+            and status = #{status, jdbcType=INTEGER}
+        </if>
+    </select>
+</mapper>

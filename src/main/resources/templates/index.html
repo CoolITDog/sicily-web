@@ -3,8 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="./test.css" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="./index.js" ></script>
 </head>
 <body>
-<h1>hello spring boot</h1>
+    <h1>Reports</h1>
+    <form id="form" onsubmit="return false" action="##">
+        <label>Tel：</label>
+        <input type="text" name="telephone"/>
+        <br>
+        <label>VIP：</label>
+        Y <input type="radio" name="radio" value="1" />
+        N <input type="radio" name="radio" value="2" />
+        <br>
+        <label>Type：</label>
+        Bread <input type="checkbox" name="checkBox" value="1">
+        BirthdayCake <input type="checkbox" name="checkBox" value="2">
+        SoftDrink <input type="checkbox" name="checkBox" value="3">
+        <br>
+        <input type="button" value="提交" onclick="ok()" style="margin-top: 10px;">
+    </form>
+
 </body>
 </html>
