@@ -2,6 +2,7 @@ package zy.com.cn.demo.take.task.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import zy.com.cn.demo.take.task.beans.ResultEntity;
 
 /**
  * @title: LoginController
@@ -13,5 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("login")
 public class LoginController {
+
+
+   /* public ResultEntity<String> authLogin(String code, String appId){
+
+    }*/
 
 }
