@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="zy.com.cn.demo.take.task.mapper.ShopCarMapper">
-    <resultMap id="BASE_RESULT_MAP" type="zy.com.cn.demo.take.task.model.ShopCar">
+<mapper namespace="zy.com.cn.sicily.web.mapper.ShopCarMapper">
+    <resultMap id="BASE_RESULT_MAP" type="zy.com.cn.sicily.web.model.ShopCar">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="food_id" jdbcType="INTEGER" property="foodId"/>
@@ -10,7 +10,7 @@
         <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
         <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag"/>
     </resultMap>
-    <resultMap id="DETAIL_RESULT_MAP" type="zy.com.cn.demo.take.task.beans.dto.ShopCarDTO" extends="BASE_RESULT_MAP">
+    <resultMap id="DETAIL_RESULT_MAP" type="zy.com.cn.sicily.web.beans.dto.ShopCarDTO" extends="BASE_RESULT_MAP">
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="image" jdbcType="VARCHAR" property="image"/>
         <result column="price" jdbcType="DOUBLE" property="price"/>
@@ -23,7 +23,7 @@
     <sql id="BASE_COLUMN">
         id, user_id, food_id, amount, status, created_by, created_date, deleted_flag
     </sql>
-    <insert id="insertRecord" parameterType="zy.com.cn.demo.take.task.model.ShopCar">
+    <insert id="insertRecord" parameterType="zy.com.cn.sicily.web.model.ShopCar">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -41,7 +41,7 @@
             'N'
         </trim>
     </insert>
-    <update id="updateRecord" parameterType="zy.com.cn.demo.take.task.model.ShopCar">
+    <update id="updateRecord" parameterType="zy.com.cn.sicily.web.model.ShopCar">
         update <include refid="BASE_TABLE"/>
         <set>
             <if test="null != foodId">
@@ -59,7 +59,7 @@
         </set>
         where  id = #{id, jdbcType=INTEGER}
     </update>
-    <select id="listRecord" parameterType="zy.com.cn.demo.take.task.model.ShopCar" resultMap="BASE_RESULT_MAP">
+    <select id="listRecord" parameterType="zy.com.cn.sicily.web.model.ShopCar" resultMap="BASE_RESULT_MAP">
         select <include refid="BASE_COLUMN"/>
         from <include refid="BASE_TABLE"/>
         where deleted_flag = 'N'
@@ -77,7 +77,7 @@
         </if>
     </select>
 
-    <select id="listDetail" parameterType="zy.com.cn.demo.take.task.model.ShopCar" resultMap="DETAIL_RESULT_MAP">
+    <select id="listDetail" parameterType="zy.com.cn.sicily.web.model.ShopCar" resultMap="DETAIL_RESULT_MAP">
         select <include refid="BASE_COLUMN"/>
         ,name,image,price,description,limit
         from <include refid="BASE_TABLE" /> as s

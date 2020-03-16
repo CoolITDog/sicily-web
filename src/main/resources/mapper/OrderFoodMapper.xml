@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="zy.com.cn.demo.take.task.mapper.OrderFoodMapper">
-    <resultMap id="BASE_RESULT_MAP" type="zy.com.cn.demo.take.task.model.OrderFood">
+<mapper namespace="zy.com.cn.sicily.web.mapper.OrderFoodMapper">
+    <resultMap id="BASE_RESULT_MAP" type="zy.com.cn.sicily.web.model.OrderFood">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="order_id" jdbcType="INTEGER" property="orderId"/>
         <result column="food_id" jdbcType="INTEGER" property="foodId"/>
@@ -15,7 +15,7 @@
     <sql id="BASE_COLUMN">
         id, order_id, food_id, amount, created_by, created_date, deleted_flag
     </sql>
-    <insert id="insertRecord" parameterType="zy.com.cn.demo.take.task.model.OrderFood">
+    <insert id="insertRecord" parameterType="zy.com.cn.sicily.web.model.OrderFood">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -32,7 +32,7 @@
             'N'
         </trim>
     </insert>
-    <select id="listRecords" parameterType="zy.com.cn.demo.take.task.model.OrderFood" resultMap="BASE_RESULT_MAP">
+    <select id="listRecords" parameterType="zy.com.cn.sicily.web.model.OrderFood" resultMap="BASE_RESULT_MAP">
         select <include refid="BASE_COLUMN"/>
         from <include refid="BASE_TABLE"/>
         where deleted_flag = 'N'
