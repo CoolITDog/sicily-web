@@ -1,8 +1,17 @@
 package zy.com.cn.demo.take.task.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import zy.com.cn.demo.take.task.beans.ResultEntity;
+import zy.com.cn.demo.take.task.manager.WechatAccessManager;
+import zy.com.cn.demo.take.task.model.Merchant;
+import zy.com.cn.demo.take.task.service.MerchantService;
 
 /**
  * @title: LoginController
@@ -15,9 +24,31 @@ import zy.com.cn.demo.take.task.beans.ResultEntity;
 @RequestMapping("login")
 public class LoginController {
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-   /* public ResultEntity<String> authLogin(String code, String appId){
+    @Autowired
+    private  MerchantService merchantService;
 
-    }*/
+    @Autowired
+    private WechatAccessManager wechatAccessManager;
+    /**
+     * 小程序授权
+     * @param code
+     * @return
+     */
+    @GetMapping("auth")
+    @ResponseBody
+    public ResultEntity<String> authLogin(String code){
+        logger.info("authlogin:{}", code);
+        try{
+            Merchant merchant = merchantService.getMerchanr();
+            String res = wechatAccessManager.jsCode2Session(code, merchant.getAppId(), merchant.getAppSecret());
+            // 获取到openId
+            return ResultEntity.success(res);
+        }catch (Exception e){
+            logger.error("authlogin error:{}", e.getMessage(), e);
+            return ResultEntity.error(e.getMessage());
+        }
+    }
 
 }

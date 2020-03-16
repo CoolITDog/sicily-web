@@ -39,7 +39,7 @@ public class WechatAccessManager {
             Assert.notNull(appId, "appId is null");
             Assert.notNull(secret, "secret is null");
             String httpUrl = GTX_JS_CODE_2_SESSION_PATH;
-            httpUrl.concat("appid=").concat(appId).concat("&secret=").concat(secret).concat("&js_code=").concat(code).concat("&grant_type=authorization_code");
+            httpUrl = httpUrl.concat("appid=").concat(appId).concat("&secret=").concat(secret).concat("&js_code=").concat(code).concat("&grant_type=authorization_code");
             logger.info("httpUrl:{}", httpUrl);
             String response = HttpClient.doGet(httpUrl);
             logger.info("js code to session response:{}", response);

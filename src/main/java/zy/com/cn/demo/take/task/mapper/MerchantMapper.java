@@ -1,5 +1,6 @@
 package zy.com.cn.demo.take.task.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import zy.com.cn.demo.take.task.model.Merchant;
 
 /**
@@ -9,6 +10,7 @@ import zy.com.cn.demo.take.task.model.Merchant;
  * @date: 2020-03-13 16:56
  * @version: 1.0
  **/
+@Mapper
 public interface MerchantMapper {
 
     /**
