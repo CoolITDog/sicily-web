@@ -14,6 +14,6 @@ public class MD5UtilsTest extends DemoTakeTaskApplicationTests {
 
     @Test
     public void test(){
-        MD5Utils.MD5Code("wonderfulSicily");
+        MD5Utils.MD5Code("123123");
     }
 }
