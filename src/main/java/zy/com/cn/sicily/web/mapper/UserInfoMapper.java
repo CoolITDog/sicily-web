@@ -24,4 +24,11 @@ public interface UserInfoMapper {
      * @return
      */
     List<UserInfo> listRecord(UserInfo record);
+
+    /**
+     * 根据openId获取用户信息
+     * @param openId
+     * @return
+     */
+    UserInfo getRecordByOpenId(String openId);
 }

@@ -28,6 +28,11 @@ public class Merchant extends BaseModel{
      */
     private String appSecret;
 
+    /**
+     * 密码
+     */
+    private String password;
+
     public String getPhone() {
         return phone;
     }
@@ -50,6 +55,14 @@ public class Merchant extends BaseModel{
 
     public void setAppSecret(String appSecret) {
         this.appSecret = appSecret;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

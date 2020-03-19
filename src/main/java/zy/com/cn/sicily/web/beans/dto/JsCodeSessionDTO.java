@@ -1,5 +1,11 @@
 package zy.com.cn.sicily.web.beans.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import zy.com.cn.sicily.web.beans.annotate.JsonAutoDetect;
+import zy.com.cn.sicily.web.beans.annotate.JsonMethod;
+
 import java.io.Serializable;
 
 /**
@@ -11,70 +17,37 @@ import java.io.Serializable;
  * @Company: Didihu.com.cn
  * @Copyright Copyright (c) 2015
  */
-
 public class JsCodeSessionDTO implements Serializable {
-	
+
 	private static final long serialVersionUID = 5543145431827278104L;
 
-	private String openId;
-	
-	private String sessionKey;
-	
-	private String unionId;
+	@JsonProperty("openid")
+	private String openid;
 
-	private Integer errCode;
+	@JsonProperty("session_key")
+	private String session_key;
 
-	private String errMsg;
-
-	public String getOpenId() {
-		return openId;
+	public String getOpenid() {
+		return openid;
 	}
 
-	public void setOpenId(String openId) {
-		this.openId = openId;
+	public void setOpenid(String openid) {
+		this.openid = openid;
 	}
 
-	public String getSessionKey() {
-		return sessionKey;
+	public String getSession_key() {
+		return session_key;
 	}
 
-	public void setSessionKey(String sessionKey) {
-		this.sessionKey = sessionKey;
-	}
-
-	public String getUnionId() {
-		return unionId;
-	}
-
-	public void setUnionId(String unionId) {
-		this.unionId = unionId;
-	}
-
-	public Integer getErrCode() {
-		return errCode;
-	}
-
-	public void setErrCode(Integer errCode) {
-		this.errCode = errCode;
-	}
-
-	public String getErrMsg() {
-		return errMsg;
-	}
-
-	public void setErrMsg(String errMsg) {
-		this.errMsg = errMsg;
+	public void setSession_key(String session_key) {
+		this.session_key = session_key;
 	}
 
 	@Override
 	public String toString() {
 		return "JsCodeSessionDTO{" +
-				"openId='" + openId + '\'' +
-				", sessionKey='" + sessionKey + '\'' +
-				", unionId='" + unionId + '\'' +
-				", errCode=" + errCode +
-				", errMsg='" + errMsg + '\'' +
+				"openid='" + openid + '\'' +
+				", session_key='" + session_key + '\'' +
 				'}';
 	}
-
 }

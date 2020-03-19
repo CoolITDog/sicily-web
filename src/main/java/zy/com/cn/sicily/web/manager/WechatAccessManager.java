@@ -1,9 +1,11 @@
 package zy.com.cn.sicily.web.manager;
 
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import zy.com.cn.sicily.web.beans.dto.JsCodeSessionDTO;
 import zy.com.cn.sicily.web.http.HttpClient;
 
 /**
@@ -17,7 +19,7 @@ import zy.com.cn.sicily.web.http.HttpClient;
 public class WechatAccessManager {
 
     /**
-     * 72、code 换取 session_key
+     * code 换取 session_key
      */
     public final static String GTX_JS_CODE_2_SESSION_PATH = "https://api.weixin.qq.com/sns/jscode2session?";
 
@@ -29,7 +31,7 @@ public class WechatAccessManager {
      * @author Alvin
      * @date 2019年4月18日 下午4:59:39
      */
-    public String jsCode2Session(String code, String appId, String secret){
+    public JsCodeSessionDTO jsCode2Session(String code, String appId, String secret){
         try {
             Assert.notNull(code, "code is null");
             Assert.notNull(appId, "appId is null");
@@ -39,7 +41,10 @@ public class WechatAccessManager {
             logger.info("httpUrl:{}", httpUrl);
             String response = HttpClient.doGet(httpUrl);
             logger.info("js code to session response:{}", response);
-            return response;
+            JSONObject jsonObject = JSONObject.fromObject(response);
+            JsCodeSessionDTO sessionDTO = (JsCodeSessionDTO) JSONObject.toBean(jsonObject, JsCodeSessionDTO.class);
+            logger.info("js code to dto response:{}", sessionDTO);
+            return sessionDTO;
         } catch (Exception e) {
             logger.error("js code to session error:" + e.getMessage(), e);
         }

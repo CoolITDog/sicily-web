@@ -4,19 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import zy.com.cn.sicily.web.beans.ResultEntity;
-import zy.com.cn.sicily.web.model.FoodCategory;
-import zy.com.cn.sicily.web.model.FoodInfo;
-import zy.com.cn.sicily.web.model.OrderFood;
-import zy.com.cn.sicily.web.model.OrderInfo;
-import zy.com.cn.sicily.web.service.FoodCategoryService;
-import zy.com.cn.sicily.web.service.FoodInfoService;
-import zy.com.cn.sicily.web.service.OrderFoodService;
-import zy.com.cn.sicily.web.service.OrderInfoService;
+import zy.com.cn.sicily.web.model.*;
+import zy.com.cn.sicily.web.service.*;
 
 import java.util.List;
 
@@ -39,6 +34,8 @@ public class MerchantController {
     private OrderInfoService orderInfoService;
     @Autowired
     private OrderFoodService orderFoodService;
+    @Autowired
+    private MerchantService merchantService;
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -122,5 +119,26 @@ public class MerchantController {
             logger.error("orderFoodService.listFoodsOfOrder error:{}", e.getMessage(), e);
             return ResultEntity.error(e.getMessage());
         }
+    }
+
+    /**
+     * 校验店家身份
+     * @param merchant
+     * @return
+     */
+    @RequestMapping("verify")
+    @ResponseBody
+    public ResultEntity<String> merchantVerify(Merchant merchant){
+        logger.info("merchantVerify param:{}", merchant);
+        Assert.notNull(merchant,"merchant is null");
+        try{
+            Merchant merchantInfo = merchantService.getMerchant();
+            if(merchantInfo.getPassword().equals(merchant.getPassword())){
+                return ResultEntity.success("success");
+            }
+        }catch (Exception e){
+            logger.error("merchantService.getMerchant error:{}", e.getMessage(), e);
+        }
+        return ResultEntity.error("failure");
     }
 }

@@ -17,6 +17,11 @@ public class UserInfo extends  BaseModel {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 小程序用户openId
+     */
+    private String openId;
+
+    /**
      * 微信名称
      */
     private String wechatName;
@@ -24,12 +29,20 @@ public class UserInfo extends  BaseModel {
     /**
      * 微信头像
      */
-    private String wechatLogo;
+    private String avatarUrl;
 
     /**
      * 手机号
      */
     private String mobile;
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 
     public String getWechatName() {
         return wechatName;
@@ -39,12 +52,12 @@ public class UserInfo extends  BaseModel {
         this.wechatName = wechatName;
     }
 
-    public String getWechatLogo() {
-        return wechatLogo;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setWechatLogo(String wechatLogo) {
-        this.wechatLogo = wechatLogo;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getMobile() {
@@ -58,8 +71,9 @@ public class UserInfo extends  BaseModel {
     @Override
     public String toString() {
         return "UserInfo{" +
-                "wechatName='" + wechatName + '\'' +
-                ", wechatLogo='" + wechatLogo + '\'' +
+                "openId='" + openId + '\'' +
+                ", wechatName='" + wechatName + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
                 ", mobile='" + mobile + '\'' +
                 "} " + super.toString();
     }

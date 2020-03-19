@@ -2,8 +2,9 @@
 <mapper namespace="zy.com.cn.sicily.web.mapper.UserInfoMapper">
     <resultMap id="BASE_RESULT_MAP" type="zy.com.cn.sicily.web.model.UserInfo">
         <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId" />
         <result column="wechat_name" jdbcType="VARCHAR" property="wechatName"/>
-        <result column="wechat_logo" jdbcType="VARCHAR" property="wechatLogo"/>
+        <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl"/>
         <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
         <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
         <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
@@ -13,7 +14,7 @@
         sicily_user_info
     </sql>
     <sql id="BASE_COLUMN">
-        id, wechat_name, wechat_logo, mobile, created_by, created_date, deleted_flag
+        id, open_id, wechat_name, avatar_url, mobile, created_by, created_date, deleted_flag
     </sql>
     <insert id="insertRecord" parameterType="zy.com.cn.sicily.web.model.UserInfo">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -21,9 +22,10 @@
         </selectKey>
         insert into <include refid="BASE_TABLE"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            wechat_name, wechat_logo, mobile, created_by, created_date, deleted_flag
+            open_id, wechat_name, avatar_url, mobile, created_by, created_date, deleted_flag
         </trim>
         <trim prefix="values(" suffix=")" suffixOverrides=",">
+            #{openId, jdbcType=VARCHAR},
             #{wechatName, jdbcType=VARCHAR},
             #{wechatLogo, jdbcType=VARCHAR},
             #{mobile, jdbcType=VARCHAR},
@@ -43,5 +45,11 @@
         <if test="mobile != null and mobile != ''">
             and  mobile = #{mobile, jdbcType=VARCHAR}
         </if>
+    </select>
+
+    <select id="getRecordByOpenId" parameterType="java.lang.String" resultMap="BASE_RESULT_MAP">
+        select <include refid="BASE_COLUMN"/>
+        from <include refid="BASE_TABLE"/>
+        where  deleted_flag = 'N' and open_id = #{openId, jdbcType=VARCHAR}
     </select>
 </mapper>

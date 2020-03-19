@@ -8,6 +8,7 @@
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
         <result column="created_date" property="createdDate" jdbcType="TIMESTAMP"/>
         <result column="deleted_flag" property="deletedFlag" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="getRecord" parameterType="zy.com.cn.sicily.web.model.Merchant" resultMap="BASE_RESULT_MAP">
         select * from sicily_merchant

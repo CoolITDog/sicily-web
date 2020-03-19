@@ -26,4 +26,11 @@ public interface UserInfoService {
      * @return
      */
     List<UserInfo> listUsers(UserInfo userInfo);
+
+    /**
+     * 根据openId获取用户信息
+     * @param openId
+     * @return
+     */
+    UserInfo getUserByOpenId(String openId);
 }

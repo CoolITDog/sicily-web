@@ -19,7 +19,7 @@ public class MerchantServiceImpl implements MerchantService {
     @Autowired
     private MerchantMapper merchantMapper;
     @Override
-    public Merchant getMerchanr() {
+    public Merchant getMerchant() {
         try{
             return  merchantMapper.getRecord();
         }catch (Exception e){

@@ -47,4 +47,15 @@ public class UserInfoServiceImpl implements UserInfoService {
             return null;
         }
     }
+
+    @Override
+    public UserInfo getUserByOpenId(String openId) {
+        Assert.notNull(openId,"openId is null");
+        try {
+            return userInfoMapper.getRecordByOpenId(openId);
+        }catch (Exception e){
+            logger.error("获取用户信息失败：{}", e.getMessage(),e);
+            return null;
+        }
+    }
 }

@@ -15,5 +15,5 @@ public interface MerchantService {
      * 获取门店信息
      * @return
      */
-    Merchant getMerchanr();
+    Merchant getMerchant();
 }
