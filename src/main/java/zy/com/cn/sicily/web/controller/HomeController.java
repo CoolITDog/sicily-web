@@ -12,8 +12,12 @@ import zy.com.cn.sicily.web.model.ShopCar;
 import zy.com.cn.sicily.web.service.FoodCategoryService;
 import zy.com.cn.sicily.web.service.FoodInfoService;
 import zy.com.cn.sicily.web.service.ShopCarService;
+import zy.com.cn.sicily.web.utils.RedisUtil;
 
+import javax.annotation.Resource;
 import java.util.List;
+
+import static zy.com.cn.sicily.web.utils.Constants.CATEGORY_REDIS_PREFIX;
 
 /**
  * @title: HomeController
@@ -34,6 +38,11 @@ public class HomeController {
     @Autowired
     private ShopCarService shopCarService;
 
+    @Resource
+    private RedisUtil redisUtil;
+
+
+
     private Logger logger = LoggerFactory.getLogger(getClass());
     /**
      * 首页获取菜单列表
@@ -43,7 +52,12 @@ public class HomeController {
     @ResponseBody
     public ResultEntity<List<FoodCategory>> listFoodCategory(){
         try{
-            List<FoodCategory> list = foodCategoryService.listCategory(new FoodCategory());
+
+            List<FoodCategory> list = (List<FoodCategory>) redisUtil.get(CATEGORY_REDIS_PREFIX);
+            if(null == list){
+                list = foodCategoryService.listCategory(new FoodCategory());
+                redisUtil.set(CATEGORY_REDIS_PREFIX, list);
+            }
             logger.info("foodCategoryService.listCategory:{}", list);
             return ResultEntity.success(list);
         }catch (Exception e){

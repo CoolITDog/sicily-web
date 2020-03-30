@@ -26,6 +26,11 @@ public class FoodInfoServiceImpl implements FoodInfoService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * 新增食品
+     * @param record 食品对象信息
+     * @return
+     */
     @Override
     public FoodInfo insertFoodInfo(FoodInfo record) {
         Assert.notNull(record, "record is null");

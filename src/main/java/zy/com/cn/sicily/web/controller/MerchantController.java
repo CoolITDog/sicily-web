@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import zy.com.cn.sicily.web.beans.ResultEntity;
 import zy.com.cn.sicily.web.model.*;
 import zy.com.cn.sicily.web.service.*;
+import zy.com.cn.sicily.web.utils.RedisUtil;
 
+import javax.annotation.Resource;
 import java.util.List;
+
+import static zy.com.cn.sicily.web.utils.Constants.CATEGORY_REDIS_PREFIX;
 
 /**
  * @title: MerchantController
@@ -37,6 +41,8 @@ public class MerchantController {
     @Autowired
     private MerchantService merchantService;
 
+    @Resource
+    private RedisUtil redisUtil;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
@@ -51,6 +57,8 @@ public class MerchantController {
         try{
             FoodCategory res = foodCategoryService.insertCategory(category);
             logger.info("foodCategoryService.insertCategory {}", res);
+            // 删除缓存
+            redisUtil.del(CATEGORY_REDIS_PREFIX);
             return ResultEntity.success(res);
         }catch (Exception e){
             logger.error("foodCategoryService.insertCategory error:{}", e.getMessage(), e);
