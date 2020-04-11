@@ -39,4 +39,11 @@ public interface FoodInfoService {
      * @return
      */
     List<FoodInfo> listFoods(FoodInfo record);
+
+    /**
+     * 根据食品id查找库存数量
+     * @param id
+     * @return
+     */
+    Integer getFoodRepository(Integer id);
 }

@@ -76,4 +76,15 @@ public class FoodInfoServiceImpl implements FoodInfoService {
             return null;
         }
     }
+
+    @Override
+    public Integer getFoodRepository(Integer id) {
+        Assert.notNull(id, "id is null");
+        try{
+            return foodInfoMapper.getFoodRepository(id);
+        }catch (Exception e){
+            logger.error("查询食品失败：{}", e.getMessage(), e);
+            return null;
+        }
+    }
 }

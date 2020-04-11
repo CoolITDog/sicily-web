@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import zy.com.cn.sicily.web.beans.ResultEntity;
+import zy.com.cn.sicily.web.cache.RedisCache;
 import zy.com.cn.sicily.web.model.*;
 import zy.com.cn.sicily.web.service.*;
 import zy.com.cn.sicily.web.utils.RedisUtil;
@@ -40,9 +41,10 @@ public class MerchantController {
     private OrderFoodService orderFoodService;
     @Autowired
     private MerchantService merchantService;
-
     @Resource
     private RedisUtil redisUtil;
+    @Autowired
+    private RedisCache redisCache;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
@@ -78,6 +80,8 @@ public class MerchantController {
         try {
             FoodInfo res = foodInfoService.insertFoodInfo(info);
             logger.info("foodInfoService.insertFoodInfo :{}", res);
+            // 设置库存缓存
+            redisCache.setSecKillNum(res.getId(), res.getTodayRepository());
             return ResultEntity.success(res);
         }catch (Exception e){
             logger.error("foodInfoService.insertFoodInfo error:{}", e.getMessage(), e);

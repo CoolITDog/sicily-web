@@ -5,6 +5,8 @@
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="attain_way" jdbcType="INTEGER" property="attainWay"/>
         <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="class_num" jdbcType="INTEGER" property="classNum"/>
+        <result column="food_num" jdbcType="INTEGER" property="foodNum"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
@@ -16,7 +18,7 @@
         sicily_order_info
     </sql>
     <sql id="BASE_COLUMN">
-        id,user_id, attain_way, price, address, remark, status, created_by, created_date, deleted_flag
+        id,user_id, attain_way, price, class_num, food_num, address, remark, status, created_by, created_date, deleted_flag
     </sql>
 
     <insert id="insertRecord" parameterType="zy.com.cn.sicily.web.model.OrderInfo">
@@ -25,12 +27,14 @@
         </selectKey>
         insert into  <include refid="BASE_TABLE"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            user_id, attain_way, price, address, remark, status, created_by, created_date, deleted_flag
+            user_id, attain_way, price, class_num, food_num, address, remark, status, created_by, created_date, deleted_flag
         </trim>
         <trim prefix="values(" suffix=")" suffixOverrides=",">
             #{userId, jdbcType=INTEGER},
             #{attainWay, jdbcType=INTEGER},
             #{price, jdbcType=DOUBLE},
+            #{classNum, jdbcType=INTEGER},
+            #{foodNum, jdbcType=INTEGER},
             #{address, jdbcType=VARCHAR},
             #{remark, jdbcType=VARCHAR},
             #{status, jdbcType=INTEGER},

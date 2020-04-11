@@ -10,19 +10,22 @@ import org.springframework.web.bind.annotation.*;
 import zy.com.cn.sicily.web.beans.ResultEntity;
 import zy.com.cn.sicily.web.beans.dto.OrderFoodDTO;
 import zy.com.cn.sicily.web.beans.dto.OrderInfoDTO;
+import zy.com.cn.sicily.web.cache.RedisCache;
 import zy.com.cn.sicily.web.model.OrderFood;
 import zy.com.cn.sicily.web.model.OrderInfo;
 import zy.com.cn.sicily.web.service.OrderFoodService;
 import zy.com.cn.sicily.web.service.OrderInfoService;
+import zy.com.cn.sicily.web.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @title: OrderController
- * @description: 订单操作控制层
- * @author: zhangyan
- * @date: 2020-03-13 11:05
- * @version: 1.0
+ * @Title OrderController
+ * @description 订单操作控制层
+ * @author zhangyan
+ * @date 2020-03-13 11:05
+ * @version 1.0
  **/
 @Controller
 @RequestMapping("order")
@@ -34,12 +37,14 @@ public class OrderController {
     private OrderInfoService orderInfoService;
     @Autowired
     private OrderFoodService orderFoodService;
+    @Autowired
+    private RedisCache redisCache;
 
     /**
      * 下订单
-     * @param list
-     * @param info
-     * @return
+     * @param list 选择的食物列表
+     * @param info 订单信息
+     * @return orderInfo 订单信息
      */
     @PostMapping("add")
     @ResponseBody
@@ -51,11 +56,30 @@ public class OrderController {
             return ResultEntity.error("食品列表为空");
         }
         try{
+            List<OrderFoodDTO> okList = new ArrayList<OrderFoodDTO>();
+            Double price = 0.0;
+            Integer classNum = 0;
+            Integer foodNum = 0;
+            // 针对每一个商品判断是否可购买
+            for(OrderFoodDTO dto:list){
+                Integer remainNum = redisCache.descValueWithLua(Constants.SEC_KILL_NUMBER_KEY_PREFIX + dto.getFoodId(), dto.getAmount(), dto.getFoodId());
+                if(remainNum < 0){
+                    logger.info("抢购失败，foodId:{}, repository:{}, needAmount:{}", dto.getFoodId(), remainNum, dto.getAmount());
+                }else{
+                    price += dto.getPrice() * dto.getAmount();
+                    classNum++;
+                    foodNum += dto.getAmount();
+                    okList.add(dto);
+                }
+            }
+            info.setPrice(price);
+            info.setClassNum(classNum);
+            info.setFoodNum(foodNum);
             // 下单
             OrderInfo res = orderInfoService.insertOrderInfo(info);
             logger.info("下单结果：{}", res);
             // 保存食物列表
-            for(OrderFoodDTO dto : list){
+            for(OrderFoodDTO dto : okList){
                 dto.setOrderId(res.getId());
                 orderFoodService.insertOrderFood(dto);
             }

@@ -1,7 +1,9 @@
 package zy.com.cn.sicily.web.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -504,5 +506,30 @@ public class RedisUtil {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    /**
+     *  @param script
+     * @param keys
+     * @param args
+     */
+    public Integer execute(DefaultRedisScript<Long> script, List<String> keys, Object... args){
+        Long value = redisTemplate.execute(script, keys, args);
+        return value==null ? null : value.intValue();
+    }
+
+    /**
+     * 先获取redis对value的操作对象的值
+     * @param key 键值
+     * @return 操作对象的值
+     */
+    public Integer boundValueOps(String key){
+        BoundValueOperations<String, Object> boundValueOps = boundValueOperations(key);
+        Object value = boundValueOps.get();
+        return value==null ? null : Integer.valueOf(value.toString());
+    }
+
+    public BoundValueOperations<String, Object> boundValueOperations(String key){
+        return redisTemplate.boundValueOps(key);
     }
 }

@@ -84,6 +84,12 @@
         where id = #{id, jdbcType=INTEGER}
     </select>
 
+    <select id="getFoodRepository" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select  today_repository
+        from <include refid="BASE_TABLE"/>
+        where id = #{id, jdbcType=INTEGER}
+    </select>
+
     <select id="listRecord" parameterType="zy.com.cn.sicily.web.model.FoodInfo" resultMap="BASE_RESULT_MAP">
         select  <include refid="BASE_COLUMN"/>
         from <include refid="BASE_TABLE"/>

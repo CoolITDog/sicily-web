@@ -32,6 +32,16 @@ public class OrderInfo extends BaseModel {
     private Double price;
 
     /**
+     * 种类个数
+     */
+    private Integer classNum;
+
+    /**
+     * 食品个数
+     */
+    private Integer foodNum;
+
+    /**
      * 地址
      */
     private String address;
@@ -94,12 +104,30 @@ public class OrderInfo extends BaseModel {
         this.status = status;
     }
 
+    public Integer getClassNum() {
+        return classNum;
+    }
+
+    public void setClassNum(Integer classNum) {
+        this.classNum = classNum;
+    }
+
+    public Integer getFoodNum() {
+        return foodNum;
+    }
+
+    public void setFoodNum(Integer foodNum) {
+        this.foodNum = foodNum;
+    }
+
     @Override
     public String toString() {
         return "OrderInfo{" +
                 "userId=" + userId +
-                ", attainWay='" + attainWay + '\'' +
+                ", attainWay=" + attainWay +
                 ", price=" + price +
+                ", classNum=" + classNum +
+                ", foodNum=" + foodNum +
                 ", address='" + address + '\'' +
                 ", remark='" + remark + '\'' +
                 ", status=" + status +

@@ -58,7 +58,7 @@ public class LoginController {
             Merchant merchant = merchantService.getMerchant();
             // 获取到openId
             JsCodeSessionDTO codeSession = wechatAccessManager.jsCode2Session(code, merchant.getAppId(), merchant.getAppSecret());
-            session.setAttribute(Constants.WEAPP_SESSION_KEY, codeSession.getSession_key());
+            session.setAttribute(Constants.WE_APP_SESSION_KEY, codeSession.getSession_key());
             if( null == session.getAttribute(Constants.OPEN_ID_SESSION_KEY)){
                 session.setAttribute(Constants.OPEN_ID_SESSION_KEY, codeSession.getOpenid());
             }

@@ -9,9 +9,12 @@ package zy.com.cn.sicily.web.utils;
  **/
 public class Constants {
 
-    public static final String WEAPP_SESSION_KEY = "WEAPP_SESSION_KEY";
+    public static final String WE_APP_SESSION_KEY = "WEAPP_SESSION_KEY";
 
     public static final String OPEN_ID_SESSION_KEY = "OPEN_ID_SESSION_KEY";
 
     public static final String CATEGORY_REDIS_PREFIX = "category_redis";
+
+    public static final String SEC_KILL_NUMBER_KEY_PREFIX = "sec_kill_number_";
+
 }
