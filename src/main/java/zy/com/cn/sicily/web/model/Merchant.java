@@ -33,6 +33,19 @@ public class Merchant extends BaseModel{
      */
     private String password;
 
+    /**
+     * 特约商户号
+     */
+    private Integer merchantId;
+
+    public Integer getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Integer merchantId) {
+        this.merchantId = merchantId;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -71,6 +84,7 @@ public class Merchant extends BaseModel{
                 "phone='" + phone + '\'' +
                 ", appId='" + appId + '\'' +
                 ", appSecret='" + appSecret + '\'' +
+                ", merchantId='" + merchantId + '\'' +
                 "} " + super.toString();
     }
 }

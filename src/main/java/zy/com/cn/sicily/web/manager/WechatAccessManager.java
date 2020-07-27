@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import zy.com.cn.sicily.web.beans.dto.JsCodeSessionDTO;
+import zy.com.cn.sicily.web.config.WeChatRequestUrl;
 import zy.com.cn.sicily.web.http.HttpClient;
 
 /**
@@ -17,11 +18,6 @@ import zy.com.cn.sicily.web.http.HttpClient;
  **/
 @Component
 public class WechatAccessManager {
-
-    /**
-     * code 换取 session_key
-     */
-    public final static String GTX_JS_CODE_2_SESSION_PATH = "https://api.weixin.qq.com/sns/jscode2session?";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
     /**
@@ -36,7 +32,7 @@ public class WechatAccessManager {
             Assert.notNull(code, "code is null");
             Assert.notNull(appId, "appId is null");
             Assert.notNull(secret, "secret is null");
-            String httpUrl = GTX_JS_CODE_2_SESSION_PATH;
+            String httpUrl = WeChatRequestUrl.GTX_JS_CODE_2_SESSION_PATH;
             httpUrl = httpUrl.concat("appid=").concat(appId).concat("&secret=").concat(secret).concat("&js_code=").concat(code).concat("&grant_type=authorization_code");
             logger.info("httpUrl:{}", httpUrl);
             String response = HttpClient.doGet(httpUrl);

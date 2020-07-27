@@ -5,6 +5,7 @@
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="app_id" jdbcType="VARCHAR" property="appId"/>
         <result column="app_secret" jdbcType="VARCHAR" property="appSecret"/>
+        <result column="merchant_id" jdbcType="INTEGER" property="merchantId"/>
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
         <result column="created_date" property="createdDate" jdbcType="TIMESTAMP"/>
         <result column="deleted_flag" property="deletedFlag" jdbcType="VARCHAR"/>
