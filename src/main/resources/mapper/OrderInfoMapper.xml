@@ -9,7 +9,10 @@
         <result column="food_num" jdbcType="INTEGER" property="foodNum"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
-        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="order_status" jdbcType="INTEGER" property="orderStatus"/>
+        <result column="pay_status" jdbcType="INTEGER" property="payStatus"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="out_trade_no" jdbcType="VARCHAR" property="outTradeNo"/>
         <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
         <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
         <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag"/>
@@ -18,7 +21,8 @@
         sicily_order_info
     </sql>
     <sql id="BASE_COLUMN">
-        id,user_id, attain_way, price, class_num, food_num, address, remark, status, created_by, created_date, deleted_flag
+        id,user_id, attain_way, price, class_num, food_num, address, remark, order_status,pay_status,
+        order_no, out_trade_no, created_by, created_date, deleted_flag
     </sql>
 
     <insert id="insertRecord" parameterType="zy.com.cn.sicily.web.model.OrderInfo">
@@ -27,7 +31,7 @@
         </selectKey>
         insert into  <include refid="BASE_TABLE"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            user_id, attain_way, price, class_num, food_num, address, remark, status, created_by, created_date, deleted_flag
+            user_id, attain_way, price, class_num, food_num, address, remark, order_status,pay_status, order_no, out_trade_no, created_by, created_date, deleted_flag
         </trim>
         <trim prefix="values(" suffix=")" suffixOverrides=",">
             #{userId, jdbcType=INTEGER},
@@ -37,7 +41,10 @@
             #{foodNum, jdbcType=INTEGER},
             #{address, jdbcType=VARCHAR},
             #{remark, jdbcType=VARCHAR},
-            #{status, jdbcType=INTEGER},
+            #{orderStatus, jdbcType=INTEGER},
+            #{payStatus, jdbcType=INTEGER},
+            #{orderNo, jdbcType=VARCHAR},
+            #{outTradeNo, jdbcType=VARCHAR},
             #{createdBy, jdbcType=VARCHAR},
             NOW(),
             'N'
@@ -56,8 +63,17 @@
             <if test="remark != null and remar != ''">
                 remark = #{remark, jdbcType=VARCHAR},
             </if>
-            <if test="status != null">
-                status =#{status, jdbcType=INTEGER},
+            <if test="orderStatus != null">
+                order_status =#{orderStatus, jdbcType=INTEGER},
+            </if>
+            <if test="payStatus != null">
+                pay_status =#{payStatus, jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                order_no = #{orderNo, jdbcType=VARCHAR},
+            </if>
+            <if test="outTradeNo != null and outTradeNo != ''">
+                out_trade_no = #{outTradeNo, jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id, jdbcType=INTEGER}
@@ -79,8 +95,29 @@
         <if test="attainWay != null">
             and attain_way = #{attainWay, jdbcType=INTEGER}
         </if>
-        <if test="status != null">
-            and status = #{status, jdbcType=INTEGER}
+        <if test="orderStatus != null">
+            and order_status =#{orderStatus, jdbcType=INTEGER}
         </if>
+        <if test="payStatus != null">
+            and pay_status =#{payStatus, jdbcType=INTEGER}
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            and order_no = #{orderNo, jdbcType=VARCHAR}
+        </if>
+        <if test="outTradeNo != null and outTradeNo != ''">
+            and out_trade_no = #{outTradeNo, jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getOrderByOrderNo" parameterType="java.lang.String" resultMap="BASE_RESULT_MAP">
+        select <include refid="BASE_COLUMN"/>
+        from  <include refid="BASE_TABLE"/>
+        where order_no = #{orderNo, jdbcType=VARCHAR}
+    </select>
+
+    <select id="getOrderByOutTradeNo" parameterType="java.lang.String" resultMap="BASE_RESULT_MAP">
+        select <include refid="BASE_COLUMN"/>
+        from  <include refid="BASE_TABLE"/>
+        where out_trade_no = #{outTradeNo, jdbcType=VARCHAR}
     </select>
 </mapper>

@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="zy.com.cn.sicily.web.mapper.UserInfoMapper">
-    <resultMap id="BASE_RESULT_MAP" type="zy.com.cn.sicily.web.model.UserInfo">
+    <resultMap id="USER_MAP" type="zy.com.cn.sicily.web.model.UserInfo">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="open_id" jdbcType="VARCHAR" property="openId" />
         <result column="wechat_name" jdbcType="VARCHAR" property="wechatName"/>
@@ -16,7 +16,7 @@
     <sql id="BASE_COLUMN">
         id, open_id, wechat_name, avatar_url, mobile, created_by, created_date, deleted_flag
     </sql>
-    <insert id="insertRecord" parameterType="zy.com.cn.sicily.web.model.UserInfo">
+    <insert id="insertUser" parameterType="zy.com.cn.sicily.web.model.UserInfo">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -27,7 +27,7 @@
         <trim prefix="values(" suffix=")" suffixOverrides=",">
             #{openId, jdbcType=VARCHAR},
             #{wechatName, jdbcType=VARCHAR},
-            #{wechatLogo, jdbcType=VARCHAR},
+            #{avatarUrl, jdbcType=VARCHAR},
             #{mobile, jdbcType=VARCHAR},
             #{createdBy, jdbcType=VARCHAR},
             NOW(),
@@ -35,7 +35,20 @@
         </trim>
     </insert>
 
-    <select id="listRecord" parameterType="zy.com.cn.sicily.web.model.UserInfo" resultMap="BASE_RESULT_MAP">
+    <update id="updateUser" parameterType="zy.com.cn.sicily.web.model.UserInfo">
+        update <include refid="BASE_TABLE"/>
+        <set>
+            <if test="wechatName != null and wechatName !=''">
+                wechat_name = #{wechatName, jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null and mobile!= '' ">
+                mobile = #{mobile, jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id, jdbcType=INTEGER}
+    </update>
+
+    <select id="userList" parameterType="zy.com.cn.sicily.web.model.UserInfo" resultMap="USER_MAP">
         select <include refid="BASE_COLUMN"/>
         from <include refid="BASE_TABLE"/>
         where  deleted_flag = 'N'
@@ -47,9 +60,25 @@
         </if>
     </select>
 
-    <select id="getRecordByOpenId" parameterType="java.lang.String" resultMap="BASE_RESULT_MAP">
+    <select id="getRecordByOpenId" parameterType="java.lang.String" resultMap="USER_MAP">
         select <include refid="BASE_COLUMN"/>
         from <include refid="BASE_TABLE"/>
         where  deleted_flag = 'N' and open_id = #{openId, jdbcType=VARCHAR}
+    </select>
+
+    <select id="getOne" parameterType="zy.com.cn.sicily.web.model.UserInfo" resultMap="USER_MAP">
+        select <include refid="BASE_COLUMN"/>
+        from <include refid="BASE_TABLE"/>
+        where  deleted_flag = 'N'
+        <if test="openId != null and openId != ''">
+            and open_id = #{openId, jdbcType=VARCHAR}
+        </if>
+        <if test="wechatName != null and wechatName != ''">
+            and wechat_name = #{wechatName, jdbcType=VARCHAR}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            and  mobile = #{mobile, jdbcType=VARCHAR}
+        </if>
+        limit 1
     </select>
 </mapper>

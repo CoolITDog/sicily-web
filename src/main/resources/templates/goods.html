@@ -1,0 +1,37 @@
+<div layout:decorator="index" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div layout:fragment="content">
+        <form id="add_goods" action="" >
+            <article>
+                <h3>名称：</h3>
+                <input id="goods_name" placeholder="请输入商品名称">
+            </article>
+            <article>
+                <h3>价格：</h3>
+                <input id="goods_price" placeholder="请输入商品价格">
+            </article>
+            <article>
+                <h3>描述：</h3>
+                <input id="goods_detail" placeholder="请输入商品描述">
+            </article>
+            <article>
+                <h3>库存：</h3>
+                <input id="goods_repository" placeholder="请输入商品库存">
+            </article>
+            <article>
+                <h3>图片：</h3>
+                <input type="file" accept="image/*"
+                       name="uploader-input"
+                       class="uploader-file"
+                       id="goods_upload" value="上传图片">
+                <div id="box"></div>
+            </article>
+            <article>
+                <h3>所属菜单：</h3>
+                <input id="goods_category" placeholder="请输入商品所属菜单">
+            </article>
+            <button id="add_goods_btn" class="btn btn-sm m-t-10">添加</button>
+            <!--<button class="btn btn-sm m-t-10">充值</button>-->
+        </form>
+    </div>
+    <script src="/js/goods.js" th:src="@{/js/goods.js}"  type="text/javascript"></script>
+</div>

@@ -56,9 +56,10 @@ public class WeChatPaymentManager {
             request.setAppId(merchant.getAppId());
             request.setMerchantId(merchant.getMerchantId().toString());
             request.setOpenId(request.getSubOpenId());
+            /* 普通商户模式不需要
             request.setSubOpenId(null);
             request.setSubAppId(null);
-            request.setSubMerchantId(null);
+            request.setSubMerchantId(null);*/
             request.setSignType(signType);
             request.setTradeType(tradeType);
             logger.info("unified order request:{}", request);

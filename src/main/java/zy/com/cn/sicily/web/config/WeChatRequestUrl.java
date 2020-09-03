@@ -17,4 +17,14 @@ public class WeChatRequestUrl {
      * 统一下单
      */
     public final static String UNIFIED_ORDER = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+
+    /**
+     * 发送服务消息
+     */
+    public final static String UNIFORM_MESSAGE_SEND = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=";
+
+    /**
+     * 获取access_token
+     */
+    public static final String TOKEN_PATH = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}";
 }

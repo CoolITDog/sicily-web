@@ -2,6 +2,7 @@
 <mapper namespace="zy.com.cn.sicily.web.mapper.MerchantMapper">
     <resultMap id="BASE_RESULT_MAP" type="zy.com.cn.sicily.web.model.Merchant">
         <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="account_name" jdbcType="VARCHAR" property="accountName"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="app_id" jdbcType="VARCHAR" property="appId"/>
         <result column="app_secret" jdbcType="VARCHAR" property="appSecret"/>
@@ -13,5 +14,9 @@
     </resultMap>
     <select id="getRecord" parameterType="zy.com.cn.sicily.web.model.Merchant" resultMap="BASE_RESULT_MAP">
         select * from sicily_merchant
+    </select>
+    <select id="getByUserName" parameterType="java.lang.String" resultMap="BASE_RESULT_MAP">
+        select * from sicily_merchant
+        where account_name like ('%',#{accountName, jdbcType=VARCHAR}, '%')
     </select>
 </mapper>

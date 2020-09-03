@@ -16,14 +16,21 @@ public interface UserInfoMapper {
      * @param record
      * @return
      */
-    int insertRecord(UserInfo record);
+    int insertUser(UserInfo record);
+
+    /**
+     * 更新用户
+     * @param record
+     * @return
+     */
+    int updateUser(UserInfo record);
 
     /**
      * 查询用户列表
      * @param record
      * @return
      */
-    List<UserInfo> listRecord(UserInfo record);
+    List<UserInfo> userList(UserInfo record);
 
     /**
      * 根据openId获取用户信息
@@ -31,4 +38,11 @@ public interface UserInfoMapper {
      * @return
      */
     UserInfo getRecordByOpenId(String openId);
+
+    /**
+     * 条件查找
+     * @param userInfo
+     * @return
+     */
+    UserInfo getOne(UserInfo userInfo);
 }

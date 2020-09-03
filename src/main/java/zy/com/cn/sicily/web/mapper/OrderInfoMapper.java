@@ -38,4 +38,18 @@ public interface OrderInfoMapper {
      * @return
      */
     List<OrderInfo> listRecord(OrderInfo info);
+
+    /**
+     * 根据订单号查询订单
+     * @param orderNo
+     * @return
+     */
+    OrderInfo getOrderByOrderNo(String orderNo);
+
+    /**
+     * 根据第三方（微信）充值订单号查询订单
+     * @param outTradeNo
+     * @return
+     */
+    OrderInfo getOrderByOutTradeNo(String outTradeNo);
 }

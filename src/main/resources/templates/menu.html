@@ -1,0 +1,32 @@
+<div layout:decorator="index" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<div layout:fragment="content">
+
+    <table id="menu_table">
+        <thead>
+        <tr>
+            <th style="width:10%" name="id">编号</th>
+            <th style="width:30%">名称</th>
+            <th style="width:60%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="category:${list}">
+            <td th:text="${category.id}">1</td>
+            <td th:text="${category.name}">1</td>
+            <td>
+                <a class="" th:attr="data-check-question-id=${category.id}">编辑</a>
+                &nbsp;&nbsp;&nbsp;<a class="" th:attr="data-question-id=${question.id}">删除</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div id="page" class="pagination">
+        <div class="btn-group m-b-10">
+            <button type="button" id="last_page_btn" class="btn-sm btn"><i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i></button>
+            <button type="button" id="current_page" class="btn-sm btn" th:value="${currentPage}">1</button>
+            <button type="button" id="next_page_btn" class="btn-sm btn"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></button>
+        </div>
+    </div>
+    <script src="/js/menu.js" th:src="@{/js/menu.js}"  type="text/javascript" />
+</div>
+</div>

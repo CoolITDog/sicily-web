@@ -25,7 +25,8 @@ public class JsCodeSessionDTO implements Serializable {
 	private String openid;
 
 	@JsonProperty("session_key")
-	private String session_key;
+	@JSONField(name="session_key")
+	private String sessionKey;
 
 	public String getOpenid() {
 		return openid;
@@ -35,19 +36,19 @@ public class JsCodeSessionDTO implements Serializable {
 		this.openid = openid;
 	}
 
-	public String getSession_key() {
-		return session_key;
+	public String getSessionKey() {
+		return sessionKey;
 	}
 
-	public void setSession_key(String session_key) {
-		this.session_key = session_key;
+	public void setSessionKey(String sessionKey) {
+		this.sessionKey = sessionKey;
 	}
 
 	@Override
 	public String toString() {
 		return "JsCodeSessionDTO{" +
 				"openid='" + openid + '\'' +
-				", session_key='" + session_key + '\'' +
+				", sessionKey='" + sessionKey + '\'' +
 				'}';
 	}
 }

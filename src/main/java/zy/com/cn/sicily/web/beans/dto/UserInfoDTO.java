@@ -23,6 +23,10 @@ public class UserInfoDTO extends UserInfo {
      */
     private String code;
 
+    private String nickName;
+
+    private String purePhoneNumber;
+
     public String getAppId() {
         return appId;
     }
@@ -37,6 +41,22 @@ public class UserInfoDTO extends UserInfo {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getPurePhoneNumber() {
+        return purePhoneNumber;
+    }
+
+    public void setPurePhoneNumber(String purePhoneNumber) {
+        this.purePhoneNumber = purePhoneNumber;
     }
 
     @Override

@@ -16,4 +16,11 @@ public interface MerchantService {
      * @return
      */
     Merchant getMerchant();
+
+    /**
+     * 根据账户名获取商户信息
+     * @param userName
+     * @return
+     */
+    Merchant getByAccountName(String accountName);
 }

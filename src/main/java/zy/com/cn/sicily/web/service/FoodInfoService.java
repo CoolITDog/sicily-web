@@ -1,5 +1,6 @@
 package zy.com.cn.sicily.web.service;
 
+import com.github.pagehelper.PageInfo;
 import zy.com.cn.sicily.web.model.FoodInfo;
 
 import java.util.List;
@@ -46,4 +47,13 @@ public interface FoodInfoService {
      * @return
      */
     Integer getFoodRepository(Integer id);
+
+    /**
+     * 分页查找食品信息
+     * @param pageNum
+     * @param pageSize
+     * @param foodInfo
+     * @return
+     */
+    PageInfo<FoodInfo> pageFoods(Integer pageNum, Integer pageSize, FoodInfo foodInfo);
 }

@@ -26,7 +26,7 @@ public class OrderInfoServiceTest extends DemoTakeTaskApplicationTests {
         info.setAddress("adsadas");
         info.setAttainWay(1);
         info.setPrice(18.05);
-        info.setStatus(1);
+//        info.setStatus(1);
         info.setCreatedBy("we");
         OrderInfo res = orderInfoService.insertOrderInfo(info);
         System.out.println(res);
@@ -36,7 +36,7 @@ public class OrderInfoServiceTest extends DemoTakeTaskApplicationTests {
     public void updateOrderInfoTest(){
         OrderInfo info = new OrderInfo();
         info.setId(1);
-        info.setStatus(2);
+//        info.setStatus(2);
         OrderInfo res = orderInfoService.updateOrderInfo(info);
         System.out.println(res);
     }

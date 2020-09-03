@@ -38,6 +38,19 @@ public class Merchant extends BaseModel{
      */
     private Integer merchantId;
 
+    /**
+     * 账户名
+     */
+    private String accountName;
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
     public Integer getMerchantId() {
         return merchantId;
     }
@@ -85,6 +98,7 @@ public class Merchant extends BaseModel{
                 ", appId='" + appId + '\'' +
                 ", appSecret='" + appSecret + '\'' +
                 ", merchantId='" + merchantId + '\'' +
+                ", accountName='" + accountName + '\'' +
                 "} " + super.toString();
     }
 }

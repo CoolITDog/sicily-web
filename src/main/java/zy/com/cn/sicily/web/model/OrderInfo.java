@@ -54,7 +54,38 @@ public class OrderInfo extends BaseModel {
     /**
      * 订单状态：1：已下单，2：已接单，3：已取消，4：完成
      */
-    private Integer status;
+    private Integer orderStatus;
+
+    /**
+     * 支付状态：1:待支付，2:支付中，3:已支付
+     */
+    private Integer payStatus;
+
+    /**
+     * 订单号
+     */
+    private String orderNo;
+
+    /**
+     * 微信平台充值订单号
+     */
+    private String outTradeNo;
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public Integer getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(Integer payStatus) {
+        this.payStatus = payStatus;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -96,14 +127,6 @@ public class OrderInfo extends BaseModel {
         this.remark = remark;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
     public Integer getClassNum() {
         return classNum;
     }
@@ -120,6 +143,22 @@ public class OrderInfo extends BaseModel {
         this.foodNum = foodNum;
     }
 
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public String getOutTradeNo() {
+        return outTradeNo;
+    }
+
+    public void setOutTradeNo(String outTradeNo) {
+        this.outTradeNo = outTradeNo;
+    }
+
     @Override
     public String toString() {
         return "OrderInfo{" +
@@ -130,7 +169,10 @@ public class OrderInfo extends BaseModel {
                 ", foodNum=" + foodNum +
                 ", address='" + address + '\'' +
                 ", remark='" + remark + '\'' +
-                ", status=" + status +
+                ", orderStatus=" + orderStatus +
+                ", payStatus=" + payStatus +
+                ", orderNo='" + orderNo + '\'' +
+                ", outTradeNo='" + outTradeNo + '\'' +
                 "} " + super.toString();
     }
 }

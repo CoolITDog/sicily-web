@@ -18,4 +18,11 @@ public interface MerchantMapper {
      * @return
      */
     Merchant getRecord();
+
+    /**
+     * 根据用户名查找商户信息
+     * @param userName
+     * @return
+     */
+    Merchant getByAccountName(String accountName);
 }

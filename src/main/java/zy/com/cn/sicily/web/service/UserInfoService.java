@@ -33,4 +33,13 @@ public interface UserInfoService {
      * @return
      */
     UserInfo getUserByOpenId(String openId);
+
+    /**
+     * 条件查询
+     * @param userInfo
+     * @return
+     */
+    UserInfo getOne(UserInfo userInfo);
+
+    UserInfo updateUser(UserInfo userInfo);
 }

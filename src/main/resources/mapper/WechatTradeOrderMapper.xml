@@ -1,0 +1,54 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zy.com.cn.sicily.web.mapper.WechatTradeOrderMapper">
+    <resultMap id="BASE_RESULT_MAP" type="zy.com.cn.sicily.web.model.WechatTradeOrder">
+        <id column="ID" jdbcType="INTEGER" property="id" />
+        <result column="APP_ID" jdbcType="VARCHAR" property="appId" />
+        <result column="MERCHANT_ID" jdbcType="VARCHAR" property="merchantId" />
+        <result column="SUB_APP_ID" jdbcType="VARCHAR" property="subAppId" />
+        <result column="SUB_MERCHANT_ID" jdbcType="VARCHAR" property="subMerchantId" />
+        <result column="OUT_TRADE_NO" jdbcType="VARCHAR" property="outTradeNo" />
+        <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+        <result column="TRANSACTION_ID" jdbcType="VARCHAR" property="transactionId" />
+        <result column="OPEN_ID" jdbcType="VARCHAR" property="openId" />
+        <result column="SUB_OPEN_ID" jdbcType="VARCHAR" property="subOpenId" />
+        <result column="NONCE_STR" jdbcType="VARCHAR" property="nonceStr" />
+        <result column="GOODS_DESC" jdbcType="VARCHAR" property="goodsDesc" />
+        <result column="ATTACH" jdbcType="VARCHAR" property="attach" />
+        <result column="TOTAL_FEE" jdbcType="INTEGER" property="totalFee" />
+        <result column="TRADE_STATUS" jdbcType="VARCHAR" property="tradeStatus" />
+        <result column="TRADE_SNAPSHOT" jdbcType="VARCHAR" property="tradeSnapshot" />
+        <result column="TIME_START" jdbcType="VARCHAR" property="timeStart" />
+        <result column="TIME_EXPIRE" jdbcType="VARCHAR" property="timeExpire" />
+        <result column="TRADE_TIME" jdbcType="TIMESTAMP" property="tradeTime" />
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+        <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+    </resultMap>
+    <sql id="Base_Table">
+        sicily_wechat_trade_order
+    </sql>
+    <sql id="Base_Column">
+       ID, APP_ID, MERCHANT_ID, SUB_APP_ID, SUB_MERCHANT_ID, OUT_TRADE_NO, ORDER_CODE,
+    TRANSACTION_ID, OPEN_ID, SUB_OPEN_ID, NONCE_STR,
+    GOODS_DESC, ATTACH, TOTAL_FEE, TRADE_STATUS, TRADE_SNAPSHOT, TIME_START, TIME_EXPIRE, TRADE_TIME, CREATED_BY, CREATED_DATE,
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+    </sql>
+    <insert id="insertRecord" parameterType="zy.com.cn.sicily.web.model.WechatTradeOrder">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into <include refid="Base_Table"/>
+        (
+        APP_ID, MERCHANT_ID, SUB_APP_ID, SUB_MERCHANT_ID, OUT_TRADE_NO, ORDER_CODE,
+        TRANSACTION_ID, OPEN_ID, SUB_OPEN_ID, NONCE_STR,
+        GOODS_DESC, ATTACH, TOTAL_FEE, TRADE_STATUS, TRADE_SNAPSHOT, TIME_START, TIME_EXPIRE, TRADE_TIME, CREATED_BY, CREATED_DATE,
+        UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+        )
+        values (
+          #{appId, jdbcType=VARCHAR}, #{merchantId, jdbcType=VARCHAR}, #{subAppId, jdbcType=VARCHAR},#{subMerchantId, jdbcType=VARCHAR}, #{outTradeNo, jdbcType=VARCHAR},
+          #{orderCode, jdbcType=VARCHAR}, #{transactionId, jdbcType=VARCHAR}, #{openId, jdbcType=VARCHAR}, #{subOpenId, jdbcType=VARCHAR}, #{nonceStr, jdbcType=VARCHAR},
+          #{goodsDesc, jdbcType=VARCHAR}, #{attach, jdbcType=VARCHAR}, #{totalFee, jdbcType=INTEGER}, #{tradeStatus, jdbcType=VARCHAR}, #{tradeSnapshot, jdbcType=VARCHAR},
+          #{timeStart, jdbcType=VARCHAR}, #{timeExpire, jdbcType=VARCHAR}, #{tradeTime, jdbcType=VARCHAR}, #{createdBy, jdbcType=VARCHAR}, now(),'N'
+        )
+    </insert>
+</mapper>
