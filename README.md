@@ -83,5 +83,16 @@
       `deleted_flag` char(1) NOT NULL DEFAULT 'N' COMMENT '删除标志。N：未删除，D：已删除，默认N',
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=gbk COMMENT='用户信息表';
-  
-    
+
+  ## 地址表
+    CREATE TABLE `sicily_user_address` (
+      `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
+      `user_id` BIGINT DEFAULT NULL COMMENT '用户id',
+      `mobile` VARCHAR(20) DEFAULT NULL COMMENT '手机号',
+      `attact_name` VARCHAR(20) DEFAULT NULL COMMENT '收货人',
+      `attact_mobile` VARCHAR(20) DEFAULT NULL COMMENT '联系电话',
+      `attact_address` VARCHAR(120) DEFAULT NULL COMMENT '联系地址',
+      `created_date` datetime DEFAULT NULL COMMENT '创建时间',
+      `deleted_flag` CHAR(1) NOT NULL DEFAULT 'N' COMMENT '删除标志。N：未删除，D：已删除，默认N',
+      PRIMARY KEY(`id`)
+    )ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=gbk COMMENT='用户地址表';;
