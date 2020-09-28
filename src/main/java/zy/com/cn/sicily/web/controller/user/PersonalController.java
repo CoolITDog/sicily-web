@@ -9,16 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import zy.com.cn.sicily.web.beans.ResultEntity;
-import zy.com.cn.sicily.web.beans.dto.OrderFoodDTO;
 import zy.com.cn.sicily.web.beans.dto.OrderInfoDTO;
-import zy.com.cn.sicily.web.cache.RedisCache;
 import zy.com.cn.sicily.web.model.OrderFood;
 import zy.com.cn.sicily.web.model.OrderInfo;
 import zy.com.cn.sicily.web.service.OrderFoodService;
 import zy.com.cn.sicily.web.service.OrderInfoService;
-import zy.com.cn.sicily.web.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,65 +34,14 @@ public class PersonalController {
     private OrderInfoService orderInfoService;
     @Autowired
     private OrderFoodService orderFoodService;
-    @Autowired
-    private RedisCache redisCache;
 
-    /**
-     * 下订单
-     * @param list 选择的食物列表
-     * @param info 订单信息
-     * @return orderInfo 订单信息
-     */
-    @PostMapping("add")
-    @ResponseBody
-    public ResultEntity<OrderInfo> addOrder(@RequestBody List<OrderFoodDTO> list, @RequestBody OrderInfo info){
-        logger.info("addOrder param:{},{}", list, info);
-        Assert.notNull(list, "list is null");
-        Assert.notNull(info,"info is null");
-        if(list.size() <= 0){
-            return ResultEntity.error("食品列表为空");
-        }
-        try{
-            List<OrderFoodDTO> okList = new ArrayList<OrderFoodDTO>();
-            Double price = 0.0;
-            Integer classNum = 0;
-            Integer foodNum = 0;
-            // 针对每一个商品判断是否可购买
-            for(OrderFoodDTO dto:list){
-                Integer remainNum = redisCache.descValueWithLua(Constants.SEC_KILL_NUMBER_KEY_PREFIX + dto.getFoodId(), dto.getAmount(), dto.getFoodId());
-                if(remainNum < 0){
-                    logger.info("抢购失败，foodId:{}, repository:{}, needAmount:{}", dto.getFoodId(), remainNum, dto.getAmount());
-                }else{
-                    price += dto.getPrice() * dto.getAmount();
-                    classNum++;
-                    foodNum += dto.getAmount();
-                    okList.add(dto);
-                }
-            }
-            info.setPrice(price);
-            info.setClassNum(classNum);
-            info.setFoodNum(foodNum);
-            // 下单
-            OrderInfo res = orderInfoService.insertOrderInfo(info);
-            logger.info("下单结果：{}", res);
-            // 保存食物列表
-            for(OrderFoodDTO dto : okList){
-                dto.setOrderId(res.getId());
-                orderFoodService.insertOrderFood(dto);
-            }
-            return ResultEntity.success(res);
-        }catch (Exception e){
-            logger.error("orderInfoService.insertOrderInfo error:{}", e.getMessage(), e);
-            return ResultEntity.error(e.getMessage());
-        }
-    }
 
     /**
      * 更改订单状态（取消、接单、）
      * @param info
      * @return
      */
-    @PostMapping("update")
+    @PostMapping("order/update")
     @ResponseBody
     public ResultEntity<OrderInfo> updateOrder(@RequestBody OrderInfo info){
         logger.info("cancelOrder param:{}", info);
@@ -115,10 +60,9 @@ public class PersonalController {
      * 分页查找订单列表
      * @param pageNum
      * @param pageSize
-     * @param info
      * @return
      */
-    @RequestMapping("/page")
+    @RequestMapping("/order/page")
     public ResultEntity<PageInfo<OrderInfo>> pageOrders(Integer pageNum, Integer pageSize, Integer userId){
         try{
             OrderInfo info = new OrderInfo();
@@ -136,7 +80,7 @@ public class PersonalController {
      * @param orderId
      * @return
      */
-    @GetMapping("get")
+    @GetMapping("order/get")
     @ResponseBody
     public ResultEntity<OrderInfoDTO> getDetail(Integer orderId){
         logger.info("getDetail params:{}", orderId);

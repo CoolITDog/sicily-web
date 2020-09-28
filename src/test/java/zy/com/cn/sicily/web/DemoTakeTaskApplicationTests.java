@@ -13,23 +13,24 @@ class DemoTakeTaskApplicationTests {
     private RedisUtil redisUtil;
     @Test
     void contextLoads() {
+        System.out.println("hello test");
     }
 
     /**
      * 插入缓存数据
      */
-    @Test
-    public void set() {
-        redisUtil.set("redis_key_2", "redis_vale");
-    }
+//    @Test
+//    public void set() {
+//        redisUtil.set("redis_key_2", "redis_vale");
+//    }
 
     /**
      * 读取缓存数据
      */
-    @Test
-    public void get() {
-        String value = (String) redisUtil.get("redis_key_2");
-        System.out.println(value);
-    }
+//    @Test
+//    public void get() {
+//        String value = (String) redisUtil.get("redis_key_2");
+//        System.out.println(value);
+//    }
 
 }

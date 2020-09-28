@@ -52,7 +52,7 @@ public class WeChatPaymentManager {
         UnifiedOrderResponse response = new UnifiedOrderResponse();
         try {
             Merchant merchant = merchantService.getMerchant();
-            String apiKey = weChatConfigService.getByName("apiKey").getConfigContent();
+            String apiKey = merchant.getAppSecret();
             request.setAppId(merchant.getAppId());
             request.setMerchantId(merchant.getMerchantId().toString());
             request.setOpenId(request.getSubOpenId());

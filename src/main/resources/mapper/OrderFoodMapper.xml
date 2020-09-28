@@ -4,6 +4,8 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="order_id" jdbcType="INTEGER" property="orderId"/>
         <result column="food_id" jdbcType="INTEGER" property="foodId"/>
+        <result column="food_name" jdbcType="VARCHAR" property="foodName"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
         <result column="amount" jdbcType="INTEGER" property="amount"/>
         <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
         <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
@@ -13,7 +15,7 @@
         sicily_order_food
     </sql>
     <sql id="BASE_COLUMN">
-        id, order_id, food_id, amount, created_by, created_date, deleted_flag
+        id, order_id, food_id, food_name,price,amount, created_by, created_date, deleted_flag
     </sql>
     <insert id="insertRecord" parameterType="zy.com.cn.sicily.web.model.OrderFood">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -21,11 +23,13 @@
         </selectKey>
         insert into  <include refid="BASE_TABLE"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            order_id, food_id, amount, created_by, created_date, deleted_flag
+            order_id, food_id, food_name,price, amount, created_by, created_date, deleted_flag
         </trim>
         <trim prefix="values(" suffix=")" suffixOverrides=",">
             #{orderId, jdbcType=INTEGER},
             #{foodId, jdbcType=INTEGER},
+            #{foodName, jdbcType=VARCHAR},
+            #{price, jdbcType=DOUBLE},
             #{amount, jdbcType=INTEGER},
             #{createdBy, jdbcType=VARCHAR},
             NOW(),

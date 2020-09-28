@@ -51,4 +51,19 @@
           #{timeStart, jdbcType=VARCHAR}, #{timeExpire, jdbcType=VARCHAR}, #{tradeTime, jdbcType=VARCHAR}, #{createdBy, jdbcType=VARCHAR}, now(),'N'
         )
     </insert>
+    <update id="updateRecordByOutTradeNo" parameterType="zy.com.cn.sicily.web.model.WechatTradeOrder">
+        update <include refid="Base_Table"/>
+        <set>
+            <if test="tradeStatus != null">
+                TRADE_STATUS = #{tradeStatus, jdbcType=VARCHAR},
+            </if>
+            <if test="tradeSnapshot != null and tradeSnapshot != ''">
+                TRADE_SNAPSHOT =  #{tradeSnapshot, jdbcType=VARCHAR},
+            </if>
+            <if test="tradeTime != null">
+                TRADE_TIME = #{tradeTime, jdbcType=VARCHAR},
+            </if>
+        </set>
+        where OUT_TRADE_NO = #{outTradeNo, jdbcType=VARCHAR}
+    </update>
 </mapper>

@@ -19,4 +19,11 @@ public interface WechatTradeOrderMapper {
      * @return
      */
     int insertRecord(WechatTradeOrder order);
+
+    /**
+     * 根据交易号修改
+     * @param order
+     * @return
+     */
+    int updateRecordByOutTradeNo(WechatTradeOrder order);
 }

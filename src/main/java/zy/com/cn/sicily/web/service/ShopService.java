@@ -1,6 +1,7 @@
 package zy.com.cn.sicily.web.service;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,24 +12,27 @@ import org.springframework.transaction.annotation.Transactional;
 import zy.com.cn.sicily.web.beans.ResultEntity;
 import zy.com.cn.sicily.web.beans.dto.CreateOrderRequestDTO;
 import zy.com.cn.sicily.web.beans.dto.CreateOrderResponseDTO;
+import zy.com.cn.sicily.web.beans.dto.PayNotifyRequestDTO;
 import zy.com.cn.sicily.web.beans.enums.PaymentErrorEnum;
 import zy.com.cn.sicily.web.beans.enums.TradeStatusEnum;
 import zy.com.cn.sicily.web.beans.vo.GenerateOrderVO;
+import zy.com.cn.sicily.web.manager.WeChatMessageManager;
 import zy.com.cn.sicily.web.manager.WeChatPaymentManager;
+import zy.com.cn.sicily.web.manager.WechatAccessManager;
 import zy.com.cn.sicily.web.mapper.WechatTradeOrderMapper;
 import zy.com.cn.sicily.web.message.request.UnifiedOrderRequest;
+import zy.com.cn.sicily.web.message.response.PayNotifyResponse;
 import zy.com.cn.sicily.web.message.response.UnifiedOrderResponse;
-import zy.com.cn.sicily.web.model.Merchant;
-import zy.com.cn.sicily.web.model.OrderInfo;
-import zy.com.cn.sicily.web.model.WechatTradeOrder;
-import zy.com.cn.sicily.web.utils.SignUtil;
-import zy.com.cn.sicily.web.utils.UnifiedOrderConverter;
-import zy.com.cn.sicily.web.utils.WechatTradeOrderConverter;
+import zy.com.cn.sicily.web.model.*;
+import zy.com.cn.sicily.web.utils.*;
 
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 import java.util.UUID;
 
 /**
@@ -78,98 +82,19 @@ public class ShopService {
     @Autowired
     private WeChatPaymentManager weChatPaymentManager;
     @Autowired
-    private WechatTradeOrderMapper wechatTradeOrderMapper;
-    /**
-     * 微信支付下订单
-     * @param generateOrderVO
-     * @return
-     */
-    /*public OrderInfo invokeWxUnifiedOrder(GenerateOrderVO generateOrderVO, String ipAddr){
-        Merchant merchant = merchantService.getMerchant();
-        if (merchant != null) {
-            CreateOrderRequestDTO createOrderRequestDTO = new CreateOrderRequestDTO();
-            createOrderRequestDTO.setSubAppId(merchant.getAppId());
-            createOrderRequestDTO.setOrderCode(generateOrderVO.getOrderNo());
-            createOrderRequestDTO.setSubOpenId(generateOrderVO.getOpenId());
-            createOrderRequestDTO.setGoodsDesc(generateOrderVO.getProductName());
-            String attach = new StringBuilder()
-                    .append(generateOrderVO.getUserId()).append(",")
-                    .append(generateOrderVO.getOrderNo()).toString();
-            logger.info("attach :{}", attach);
-            String payPrice = generateOrderVO.getPrice().toString();
-            Integer totalFee = 0;
-            if (StringUtils.isNotEmpty(payPrice)) {
-                BigDecimal bd = new BigDecimal(100);
-                BigDecimal priceBd = new BigDecimal(payPrice).multiply(bd).setScale(2, RoundingMode.UP);
-                totalFee = priceBd.intValue();
-            }
-            createOrderRequestDTO.setTotalFee(totalFee);
-            SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-            Date date = new Date();
-            // 5分钟超时（网络延时，超时设置为6分钟）
-            String timeStart = df.format(date);
-            String timeExpire = df.format(new Date(date.getTime() + 360000));
-            createOrderRequestDTO.setTimeStart(timeStart);
-            createOrderRequestDTO.setTimeExpire(timeExpire);
-            createOrderRequestDTO.setSpbillCreateIp(ipAddr);
-            // 微信支付回调地址
-            String notifyUrl = environment.getProperty("sicily.web.wx.pay.notify.url");
-            createOrderRequestDTO.setNotifyUrl(notifyUrl);
-            createOrderRequestDTO.setAttach(attach);
-            RpcResponse<CreateOrderResponseDTO> createOrderResponse = wechatPaymentRemote.createOrder(createOrderRequestDTO);
-            logger.info("wechatPaymentRemote.createOrder result:{}", createOrderResponse.getResult());
-            //更新outTradeNo到订单数据库
-            if (createOrderResponse.getResult() != null) {
-                CreateOrderResponseDTO orderResponseDTO = createOrderResponse.getResult();
-                WxShopActivityRechargeRecordDTO updateOutTradeNo = new WxShopActivityRechargeRecordDTO();
-                updateOutTradeNo.setId(paymentOrderRequestVO.getOrderId());
-                updateOutTradeNo.setOutTradeNo(orderResponseDTO.getOutTradeNo());
-                updateOutTradeNo.setPhone(paymentOrderRequestVO.getPhone());
-                updateOutTradeNo.setShopId(paymentOrderRequestVO.getActivityId());
-                RpcResponse<ShopActivityRechargeRecordDTO> updateRes = wxShopRechargeRecordRemote.editShopInfoByID(updateOutTradeNo);
-                logger.info("update outTradeNo result:{}", updateRes.getResult());
-            }
-            return ResultEntity.result(createOrderResponse);
-        }
-    }*/
-
-    /**
-     * 创建微信订单
-     * @param createOrderRequestDTO
-     * @return
-     * @throws Exception
-     */
-    /*private CreateOrderResponseDTO createOrder(CreateOrderRequestDTO createOrderRequestDTO)throws Exception{
-        UnifiedOrderRequest request = UnifiedOrderConverter.INSTANCE.converterToTarget(createOrderRequestDTO);
-        request.setNonceStr(UUID.randomUUID().toString().replace("-", "").substring(0, 32));
-        request.setOutTradeNo(String.valueOf(nextId()));
-        UnifiedOrderResponse response = weChatPaymentManager.unifiedOrder(request);
-        if(response.isFail()){
-            throw new Exception(response.getErrMessage());
-        }
-        // 保存交易订单信息
-        WechatTradeOrder wechatTradeOrder = saveOrder(request, createOrderRequest.getOrderCode());
-        logger.info("save wechat trade order success:{}", wechatTradeOrder);
-        String apiKey = environment.getProperty("api.key");
-        // 服务商模式
-        String appId = request.getSubAppId();
-        WechatPaymentConfig config = wechatPaymentConfigService.getByAppId(request.getAppId());
-        // 判断是否为普通商户模式
-        if(config != null){
-            apiKey = config.getPartnerKey();
-            appId = config.getAppId();
-        }
-        CreateOrderResponseDTO createOrderResponse = new CreateOrderResponseDTO();
-        createOrderResponse.setNonceStr(request.getNonceStr());
-        createOrderResponse.setSignType(property.getSignType());
-        createOrderResponse.setPrepayId(response.getPrepayId());
-        createOrderResponse.setTimeStamp(String.valueOf(System.currentTimeMillis()));
-        createOrderResponse.setPaySign(SignUtil.getPaySign(createOrderResponse, appId, apiKey));
-        createOrderResponse.setOutTradeNo(request.getOutTradeNo());
-        logger.info("create order response:{}", createOrderResponse);
-        return createOrderResponse;
-    }*/
-
+    private WechatTradeOrderService wechatTradeOrderService;
+    @Autowired
+    private WechatMessageConfigService wechatMessageConfigService;
+    @Autowired
+    private UserInfoService userInfoService;
+    @Autowired
+    private WechatAccessManager wechatAccessManager;
+    @Autowired
+    private WeChatMessageManager weChatMessageManager;
+    @Autowired
+    private HttpSession session;
+    @Autowired
+    private PayNotifyRequestConverter payNotifyRequestConverter;
     /**
      * 保存订单原始记录
      * @param unifiedOrderRequest
@@ -186,7 +111,7 @@ public class ShopService {
             wechatTradeOrder.setCreatedBy(StringUtils.defaultIfEmpty(wechatTradeOrder.getOpenId(), wechatTradeOrder.getSubOpenId()));
             wechatTradeOrder.setCreatedDate(new Date());
             wechatTradeOrder.setDeletedFlag("N");
-            wechatTradeOrderMapper.insertRecord(wechatTradeOrder);
+            wechatTradeOrderService.insertRecord(wechatTradeOrder);
             return wechatTradeOrder;
         }catch(Exception e){
             throw new Exception(PaymentErrorEnum.DATABASE_ERROR.getValue(), e);
@@ -234,45 +159,68 @@ public class ShopService {
     }
 
     /**
-     * 获得下一个ID (该方法是线程安全的)
-     * @return SnowflakeId
+     * 支付成功回调
+     * @param requestBody
+     * @return
      */
-    public synchronized long nextId() {
-        long timestamp = System.currentTimeMillis();
-        //如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
-        if (timestamp < lastTimestamp) {
-            throw new RuntimeException(
-                    String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
-        }
-        //如果是同一时间生成的，则进行毫秒内序列
-        if (lastTimestamp == timestamp) {
-            sequence = (sequence + 1) & sequenceMask;
-            //毫秒内序列溢出
-            if (sequence == 0) {
-                //阻塞到下一个毫秒,获得新的时间戳
-                timestamp = tilNextMillis(lastTimestamp);
+    public String notifyAfterPaid(String requestBody){
+        logger.info("payment notify requestBody:{}", requestBody);
+        OrderInfo info = new OrderInfo();
+        try {
+            PayNotifyRequestDTO payNotifyRequest = new PayNotifyRequestDTO();
+            payNotifyRequest.setNotifyXml(requestBody);
+            PayNotifyResponse response = payNotifyRequestConverter.convert(payNotifyRequest.getNotifyXml());
+            if(response.isFail()){
+                return null;
             }
-        }else { //时间戳改变，毫秒内序列重置
-            sequence = 0L;
+            // TODO
+            String apiKey = "";
+            boolean sign = SignUtil.verify(payNotifyRequest.getNotifyXml(), apiKey, response.getSign());
+            if(!sign){
+                return null;
+            }
+            //支付成功，修改支付状态
+            WechatTradeOrder tradeOrder = new WechatTradeOrder();
+            tradeOrder.setOutTradeNo(response.getOutTradeNo());
+            tradeOrder.setTradeStatus(TradeStatusEnum.SUCCESS.getValue());
+            tradeOrder.setTradeSnapshot(payNotifyRequest.getNotifyXml());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            tradeOrder.setTradeTime(sdf.parse(response.getTimeEnd()));
+            wechatTradeOrderService.updateRecordByOutTradeNo(tradeOrder);
+            // 修改订单状态
+            info = orderInfoService.getOrderByOutTradeNo(response.getOutTradeNo());
+            info.setPayStatus(3);
+            info.setOrderStatus(1);
+            orderInfoService.updateOrderInfo(info);
+        } catch (Exception e) {
+            logger.error("notifyAfterPaid error:{}", e.getMessage(), e);
         }
-        //上次生成ID的时间截
-        lastTimestamp = timestamp;
-        //移位并通过或运算拼到一起组成64位的ID
-        return ((timestamp - epoch) << timestampLeftShift)
-                | (dataCenterId << dataCenterIdShift)
-                | (workerId << workerIdShift)
-                | sequence;
+        // 通知商店
+        UserInfo condition = new UserInfo();
+        condition.setId(info.getUserId());
+        UserInfo user =  userInfoService.getOne(condition);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sendMessage(info.getId(), info.getPrice(), info.getRemark(),user.getWechatName(),sdf.format(info.getCreatedDate()));
+        return "success";
     }
+
     /**
-     * 阻塞到下一个毫秒，直到获得新的时间戳
-     * @param lastTimestamp 上次生成ID的时间截
-     * @return 当前时间戳
+     * 发送消息
+     * @param params
      */
-    private long tilNextMillis(long lastTimestamp) {
-        long timestamp = System.currentTimeMillis();
-        while (timestamp <= lastTimestamp) {
-            timestamp = System.currentTimeMillis();
-        }
-        return timestamp;
+    public void sendMessage(Object... params){
+        Properties properties = new Properties();
+        // 获取商家的openId
+        Merchant merchant = merchantService.getMerchant();
+        UserInfo condition = new UserInfo();
+        condition.setMobile(merchant.getPhone());
+        UserInfo userInfo = userInfoService.getOne(condition);
+        properties.setProperty("touser", userInfo.getOpenId());
+        // 获取模板内容
+        WechatMessageConfig config = wechatMessageConfigService.getByMsgType(1);
+        properties.setProperty("weapp_template_msg", config.getTemplate());
+        String templateMessage = MessageFormat.format(PropertyConfig.getExtendString(properties,"weapp_template_msg"),params);
+        String accessToken = wechatAccessManager.getAccessToken(merchant.getAppId(),merchant.getAppSecret());
+        weChatMessageManager.uniformMessageSend(accessToken,templateMessage);
     }
 }

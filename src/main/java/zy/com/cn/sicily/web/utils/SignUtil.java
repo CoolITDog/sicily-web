@@ -3,6 +3,7 @@ package zy.com.cn.sicily.web.utils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import zy.com.cn.sicily.web.beans.dto.CreateOrderResponseDTO;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -117,5 +118,34 @@ public class SignUtil {
 
     public static boolean verify(Object obj, String apiKey, String sign) throws Exception{
         return sign.equals(getSign(obj, apiKey));
+    }
+
+    /**
+     * 获取支付签名
+     * @param response
+     * @param appId
+     * @param apiKey
+     * @return
+     * @author Alvin
+     * @date 2019年5月4日 下午2:22:33
+     */
+    public static String getPaySign(CreateOrderResponseDTO response, String appId, String apiKey){
+        StringBuffer sb = new StringBuffer();
+        sb.append("appId=")
+                .append(appId)
+                .append("&nonceStr=")
+                .append(response.getNonceStr())
+                .append("&package=prepay_id=")
+                .append(response.getPrepayId())
+                .append("&signType=")
+                .append(response.getSignType())
+                .append("&timeStamp=")
+                .append(response.getTimeStamp())
+                .append("&key=")
+                .append(apiKey);
+        logger.info("pay sign string:{}", sb);
+        String paySign = MD5Utils.md5(sb.toString()).toUpperCase();
+        logger.info("pay sign md5 string:{}", paySign);
+        return paySign;
     }
 }

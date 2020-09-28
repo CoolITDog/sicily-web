@@ -76,7 +76,7 @@ public class WechatAccessManager {
             JSONObject object = JSONObject.parseObject(response);
             Integer errcode = object.getInteger(ERR_CODE);
             if(errcode != null && errcode != 0){
-                logger.error("get authorizer access token error:{}" ,object.getString("errmsg"));
+                logger.error("get authorize access token error:{}" ,object.getString("errmsg"));
                 return null;
             }
             accessToken = object.getString("access_token");
@@ -85,7 +85,7 @@ public class WechatAccessManager {
             redisTemplate.opsForValue().set(Constants.AUTHORIZE_ACCESS_TOKEN, accessToken, expiresIn - 600, TimeUnit.SECONDS);
             return accessToken.toString();
         } catch (Exception e) {
-            logger.error("get authorizer access token error:" + e.getMessage(), e);
+            logger.error("get authorize access token error:" + e.getMessage(), e);
             throw null;
         }
     }

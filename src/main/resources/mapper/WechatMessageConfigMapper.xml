@@ -1,0 +1,27 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zy.com.cn.sicily.web.mapper.WechatMessageConfigMapper">
+    <resultMap id="BASE_RESULT_MAP" type="zy.com.cn.sicily.web.model.WechatMessageConfig">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="msg_type" jdbcType="INTEGER" property="msgType" />
+        <result column="msg_name" jdbcType="VARCHAR" property="msgName"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="template_id" jdbcType="VARCHAR" property="templateId"/>
+        <result column="template_text" jdbcType="VARCHAR" property="templateText"/>
+        <result column="template" jdbcType="VARCHAR" property="template"/>
+        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag"/>
+    </resultMap>
+    <sql id="Base_Table">
+        sicily_wechat_message_config
+    </sql>
+    <sql id="Base_Column">
+        id, msg_type, msg_name, status, template_id, template_text, template, app_id, created_by, created_date, deleted_flag
+    </sql>
+    <select id="getByMsgType" resultMap="BASE_RESULT_MAP" parameterType="java.lang.Integer">
+        select <include refid="Base_Column"/>
+        from  <include refid="Base_Table"/>
+        where msg_type = #{msgType, jdbcType=INTEGER}
+    </select>
+</mapper>

@@ -28,6 +28,15 @@ public class OrderFood extends BaseModel {
      * 数量
      */
     private Integer amount;
+    /**
+     * 食品单价
+     */
+    private Double price;
+
+    /**
+     * 食品名称
+     */
+    private String foodName;
 
     public Integer getOrderId() {
         return orderId;
@@ -53,12 +62,30 @@ public class OrderFood extends BaseModel {
         this.amount = amount;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getFoodName() {
+        return foodName;
+    }
+
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
+    }
+
     @Override
     public String toString() {
         return "OrderFood{" +
                 "orderId=" + orderId +
                 ", foodId=" + foodId +
                 ", amount=" + amount +
+                ", price=" + price +
+                ", foodName='" + foodName + '\'' +
                 "} " + super.toString();
     }
 }

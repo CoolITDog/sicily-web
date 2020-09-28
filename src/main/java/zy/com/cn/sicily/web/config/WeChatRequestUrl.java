@@ -21,10 +21,15 @@ public class WeChatRequestUrl {
     /**
      * 发送服务消息
      */
-    public final static String UNIFORM_MESSAGE_SEND = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=";
-
+//    public final static String UNIFORM_MESSAGE_SEND = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=";
+    public final static String UNIFORM_MESSAGE_SEND = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=";
     /**
      * 获取access_token
      */
     public static final String TOKEN_PATH = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}";
+
+    /**
+     * 获取订阅消息模板列表
+     */
+    public static final String GET_TEMPLATE_LIST_PATH = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?access_token=";
 }

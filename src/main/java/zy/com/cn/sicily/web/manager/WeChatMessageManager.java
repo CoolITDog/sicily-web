@@ -37,4 +37,20 @@ public class WeChatMessageManager {
         return null;
     }
 
+    /**
+     * 获取订阅消息模板
+     * @param accessToken
+     * @return
+     */
+    public String getTemplateList(String accessToken){
+        try{
+            String url = WeChatRequestUrl.GET_TEMPLATE_LIST_PATH +accessToken;
+            String json = HttpClient.doGet(url);
+            logger.info("sendMessage response json:{}", json);
+            return json;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
 }
